@@ -1,5 +1,6 @@
 import * as types from './actionTypes';
 import courseApi from '../api/mockCourseApi';
+import {beginAjaxCall, ajaxCallError} from './ajaxStatusActions';
 
 // These are action creators
 export function loadCoursesSuccess(courses) {
@@ -15,7 +16,9 @@ export function updateCourseSuccess(course) {
 }
 
 export function loadCourses() {
+    // This is a thunk
     return function(dispatch) {
+        dispatch(beginAjaxCall());
         return courseApi.getAllCourses().then(courses => {
             dispatch(loadCoursesSuccess(courses));
         }).catch(error => {
@@ -25,11 +28,14 @@ export function loadCourses() {
 }
 
 export function saveCourse(course) {
+    // This is a thunk
     return function (dispatch, getState) {
+        dispatch(beginAjaxCall());
         return courseApi.saveCourse(course).then(course => {
             course.id ? dispatch(updateCourseSuccess(course)) :
                 dispatch(createCourseSuccess(course));
         }).catch(error => {
+            dispatch(ajaxCallError(error));
             throw(error);
         });
     };

@@ -83,7 +83,7 @@ export default class LoginForm extends Component {
                         <label htmlFor="username">User Name: </label>
                         <input 
                             type="text"
-                            className="form-contorl"
+                            className="form-control"
                             placeholder="Email Address"
                             ref={element => this.username = element} />
                     </div>

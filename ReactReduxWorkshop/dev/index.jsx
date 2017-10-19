@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import LoginForm from "./components/app/loginForm.jsx";
+import AppContainer from "./containers/appContainer.jsx";
 
 require("./site.scss");
 
 ReactDOM.render(
-    <LoginForm />,
+    <AppContainer />,
     document.querySelector("#container")
 )

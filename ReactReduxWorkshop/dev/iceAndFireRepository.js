@@ -17,8 +17,14 @@ const get =
     url => axios.get(url, API_REQUEST_HEADER);
 
 const getPage =
-    category =>
+    (category, munge) =>
         (page, pageSize) =>
-            get(`${API_URL}/${category}?page=${page}&pageSize=${pageSize}`);
+            get(`${API_URL}/${category}?page=${page}&pageSize=${pageSize}`)
+                .then(response => response.data.map(munge));
 
-export const getCharacters = getPage(API_CATEGORY.CHARACTERS);
+const mungeCharacter = 
+    character => ({
+        name : character.name || (character.aliases[0] + "*")
+    })
+
+export const getCharacters = getPage(API_CATEGORY.CHARACTERS, mungeCharacter);

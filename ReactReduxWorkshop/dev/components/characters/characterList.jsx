@@ -11,7 +11,11 @@ export default class CharacterList extends Component {
     }
     
     render () {
-        return null;
+        return (
+            <ul>
+                {this.state.characters.map((c, ix) => <li key={ix}>{c.name}</li>)}
+            </ul>
+        );
     }
 
     componentDidMount () {
@@ -20,7 +24,7 @@ export default class CharacterList extends Component {
             .then(
                 response => 
                     this.setState({
-                        characters: response.data
+                        characters: response
                     }));
     }
 }

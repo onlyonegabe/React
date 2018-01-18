@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Switch, NavLink } from "react-router-dom";
 import LoginForm from "../components/app/loginForm.jsx";
 import Home from "../components/home/home.jsx";
-import CharacterList from "../components/characters/characterList.jsx";
+import CharacterHome from "./characters/characterHome.jsx";
 
 const NavBar = props => (
   <ul className="list-inline navMenu">
@@ -12,7 +12,7 @@ const NavBar = props => (
       </NavLink>
     </li>
     <li role="presentation">
-      <NavLink to="/characters" exact activeClassName="active">
+      <NavLink to="/characters" activeClassName="active">
         Characters
       </NavLink>
     </li>
@@ -25,16 +25,16 @@ export default class AppContainer extends Component {
       <BrowserRouter>
         <div>
           <NavBar />
-          <div className="icaAndFireBody">
+          <div className="iceAndFireBody">
             <LoginForm />
             <Switch>
               <Route path="/" exact component={Home} />
-              <Route path="/characters" exact component={CharacterList} />
+              <Route path="/characters" component={CharacterHome} />
               <Route
                 render={props => (
                   <div className="spacerTop alert alert-danger">
-                    Sorry, the resource you requested ({props.match.path}) does
-                    not exist
+                    Sorry, the resource you requested ({props.location.pathname})
+                    does not exist.
                   </div>
                 )}
               />

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import {
+  loginSuccess,
+  loginFailure,
+  logOut
+} from "../../actions/authentication.js";
 
-export default class LoginForm extends Component {
+class LoginFormImpl extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      validationError: null,
-      username: localStorage.getItem("username")
-    };
 
     // Ensure that 'this' is defined properly for event handling
     this.handleLogin = this.handleLogin.bind(this);
@@ -19,24 +21,22 @@ export default class LoginForm extends Component {
 
     if (emailAddress && password) {
       localStorage.setItem("username", emailAddress);
-      this.setState({ username: emailAddress, validationError: null });
+      this.props.dispatchLoginSuccess(emailAddress);
     } else {
-      this.setState({
-        username: null,
-        validationError:
-          "There was a problem logging you in. Please check your credentials and try again."
-      });
+      this.props.dispatchLoginFailure(
+        "There was a problem logging you in. Please check your credentials and try again."
+      );
     }
   }
 
   handleLogoff(e) {
     e.preventDefault();
     localStorage.removeItem("username");
-    this.setState({ username: null, validationError: null });
+    this.props.dipatchLogoff();
   }
 
   render() {
-    if (this.state.username) {
+    if (this.props.username) {
       var buttonStyle = {
         border: "1px solid #AA0000",
         borderRadius: "5px",
@@ -50,7 +50,7 @@ export default class LoginForm extends Component {
 
       return (
         <div>
-          Hello, {this.state.username}!{" "}
+          Hello, {this.props.username}!{" "}
           <a href="#" onClick={this.handleLogoff} style={buttonStyle}>
             Log Off
           </a>
@@ -60,8 +60,8 @@ export default class LoginForm extends Component {
 
     return (
       <div>
-        {this.state.validationError ? (
-          <div className="alert alert-danger">{this.state.validationError}</div>
+        {this.props.validationError ? (
+          <div className="alert alert-danger">{this.props.validationError}</div>
         ) : null}
         <div className="form-inline">
           <div className="form-group">
@@ -89,3 +89,18 @@ export default class LoginForm extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  username: state.username,
+  validationError: state.validationError
+});
+
+const mapDispatchToProps = dispatch => ({
+  dispatchLoginSuccess: username => dispatch(loginSuccess(username)),
+  dispatchLoginFailure: errorMessage => dispatch(loginFailure(errorMessage)),
+  dipatchLogoff: () => dispatch(logOut())
+});
+
+const LoginForm = connect(mapStateToProps, mapDispatchToProps)(LoginFormImpl);
+
+export default LoginForm;
